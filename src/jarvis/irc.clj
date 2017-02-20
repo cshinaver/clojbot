@@ -1,5 +1,6 @@
 (ns jarvis.irc
-  (:require [irclj.core :as irclj]))
+  (:require [irclj.core :as irclj]
+            [jarvis.util :as util]))
 
 (def username "hotbot")
 ;(def host "irc.freenode.net")
@@ -39,5 +40,40 @@
   (connect
    {:privmsg (fn [type s] (prn (str (:nick s) ": " (:text s))))}))
 
+(defn pull-link-from-message
+  [msg]
+  (re-find #"https?://\S*" msg))
 
+(defn send-buified-image-link-from-msg
+  "Finds image link in message and sends buified link to user"
+  [user msg]
+  (let [link (pull-link-from-message msg)
+        buified-link (util/buify-image link)]
+    (send-message user buified-link)))
+
+(defmacro debug-slack
+  [s & args]
+  `(do
+     (prn ~s)
+     ~@args))
+
+(defn determine-recipient
+  [s]
+  (if (= (:target s) username)
+    (:nick s)
+    (:target s)))
+
+(defn connect-to-slack
+  "Main method that should be called at beginning of the app"
+  []
+  (connect
+   {:privmsg
+    (fn [type s]
+      (let [msg (:text s)
+            user (:nick s)
+            link (pull-link-from-message msg)]
+        (if (not (nil? (re-find #"hotbot:" msg)))
+          (cond
+            (not (nil? link)) (send-buified-image-link-from-msg (determine-recipient s) (:text s))
+            :else (send-message (determine-recipient s) msg)))))}))
 
