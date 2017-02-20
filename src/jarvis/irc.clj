@@ -77,8 +77,9 @@
     (fn [type s]
       (let [msg (:text s)
             user (:nick s)
-            link (pull-link-from-message msg)]
-        (if (not (nil? (re-find #"hotbot:" msg)))
+            link (pull-link-from-message msg)
+            recipient (determine-recipient s)]
+        (if (or (not (nil? (re-find #"hotbot:" msg))) (message-contains? #"@hotbot" msg))
           (cond
             (not (nil? link)) (send-buified-image-link-from-msg (determine-recipient s) (:text s))
             :else (send-message (determine-recipient s) msg)))))}))
