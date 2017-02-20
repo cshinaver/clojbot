@@ -81,6 +81,7 @@
             recipient (determine-recipient s)]
         (if (or (not (nil? (re-find #"hotbot:" msg))) (message-contains? #"@hotbot" msg))
           (cond
-            (not (nil? link)) (send-buified-image-link-from-msg (determine-recipient s) (:text s))
-            :else (send-message (determine-recipient s) msg)))))}))
+            (not (nil? link)) (send-buified-image-link-from-msg recipient (:text s))
+            (message-contains? #"who's better than bobbit?" msg) (send-message recipient "I am.")
+            :else (send-message recipient msg)))))}))
 
