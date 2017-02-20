@@ -63,6 +63,12 @@
     (:nick s)
     (:target s)))
 
+(defn message-contains?
+  [re msg]
+  (if (not (nil? (re-find re msg)))
+    true
+    false))
+
 (defn connect-to-slack
   "Main method that should be called at beginning of the app"
   []
