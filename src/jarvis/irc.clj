@@ -71,17 +71,8 @@
 
 (defn connect-to-slack
   "Main method that should be called at beginning of the app"
-  []
+  [dispatch-handler]
   (connect
    {:privmsg
-    (fn [type s]
-      (let [msg (:text s)
-            user (:nick s)
-            link (pull-link-from-message msg)
-            recipient (determine-recipient s)]
-        (if (or (message-contains? #"hotbot:" message) (message-contains? #"@hotbot" msg))
-          (cond
-            (not (nil? link)) (send-buified-image-link-from-msg recipient (:text s))
-            (message-contains? #"who's better than bobbit?" msg) (send-message recipient "I am.")
-            :else (send-message recipient msg)))))}))
+    dispatch-handler}))
 
