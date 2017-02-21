@@ -26,11 +26,11 @@
   []
   (irc/send-message "#lug" "bobbit: Do you have a purpose?"))
 
-(def handle-lisp? (comp some? (partial re-find #"\([a-zA-Z-]+ ?(.*)\)")))
+(def handle-lisp? (comp some? (partial re-find #"^\([a-zA-Z-?]+ ?(.*)\)")))
 
 (defn handle-lisp
   [recipient msg]
-  (let [m (re-find #"\(([a-zA-Z-]+) ?(.*)\)" msg)
+  (let [m (re-find #"\(([a-zA-Z-?]+) ?(.*)\)" msg)
         call (second m)
         arg (nth m 2 nil)]
     (cond
