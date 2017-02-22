@@ -7,4 +7,5 @@
   "I don't do a whole lot ... yet."
   [& args]
   (irc/connect-to-slack dispatch-handler)
-  (while true))
+  (while true
+    (Thread/sleep 100)))
