@@ -1,2 +1,0 @@
-(ns jarvis.image-manipulation)
-
