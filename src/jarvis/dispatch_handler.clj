@@ -49,8 +49,7 @@
                          (partial irc/send-message recipient)
                          (usage)))
       (= call "troll-bobbit") (troll-bobbit)
-      (= call "stutter?") (send-stutter channel arg)
-      :else (doall (map (partial irc/send-message recipient) (usage))))))
+      (= call "stutter?") (send-stutter channel arg))))
 
 (defn dispatch-handler
   [type s]
